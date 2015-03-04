@@ -8,7 +8,8 @@ namespace SportClub.Models
     public class Members
     {
         public int ID { get; set; }
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public DateTime DateOfBirth { get; set; }
         public String Sport { get; set; }
         public string Group { get; set; }
