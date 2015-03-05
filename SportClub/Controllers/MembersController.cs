@@ -16,8 +16,10 @@ namespace SportClub.Controllers
         private SportContext db = new SportContext();
 
         // GET: Members
+        [HttpGet]
         public ActionResult Index()
         {
+            
             return View(db.MembersDb.ToList());
         }
 
@@ -37,6 +39,7 @@ namespace SportClub.Controllers
         }
 
         // GET: Members/Create
+        [HttpGet]
         public ActionResult Create()
         {
             return View();

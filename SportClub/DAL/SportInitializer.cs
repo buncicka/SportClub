@@ -6,7 +6,7 @@ using System.Web;
 
 namespace SportClub.DAL
 {
-    public class SportInitializer: System.Data.Entity. DropCreateDatabaseIfModelChanges<SportContext>
+    public class SportInitializer: System.Data.Entity.DropCreateDatabaseIfModelChanges<SportContext>
     {
         protected override void Seed(SportContext context)
         {
@@ -22,7 +22,7 @@ namespace SportClub.DAL
             members.ForEach(m => context.MembersDb.Add(m));
             context.SaveChanges();
 
-            base.Seed(context);
+            //base.Seed(context);
         }
     }
 }
