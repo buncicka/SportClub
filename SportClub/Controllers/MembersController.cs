@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using SportClub.DAL;
 using SportClub.Models;
+using PagedList;
 
 namespace SportClub.Controllers
 {
@@ -17,10 +18,53 @@ namespace SportClub.Controllers
 
         // GET: Members
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
-            
-            return View(db.MembersDb.ToList());
+            ViewBag.CurrentSort = sortOrder;
+
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.LastNameSortParm = String.IsNullOrEmpty(sortOrder) ? "Lastname_desc" : "";
+            ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
+            var members = from s in db.MembersDb
+                           select s;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                members = members.Where(s => s.FirstName.Contains(searchString)
+                                       || s.LastName.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    members = members.OrderByDescending(s => s.FirstName);
+                    break;
+                case "Lastname_desc":
+                    members = members.OrderByDescending(s => s.LastName);
+                    break;
+                case "Date":
+                    members = members.OrderBy(s => s.EnrollmentDate);
+                    break;
+                case "date_desc":
+                    members = members.OrderByDescending(s => s.EnrollmentDate);
+                    break;
+                default:
+                    members = members.OrderBy(s => s.FirstName);
+                    break;
+            }
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
+            return View(members.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Members/Details/5

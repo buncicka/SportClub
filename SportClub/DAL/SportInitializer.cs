@@ -22,7 +22,7 @@ namespace SportClub.DAL
             members.ForEach(m => context.MembersDb.Add(m));
             context.SaveChanges();
 
-            //base.Seed(context);
+            base.Seed(context);
         }
     }
 }
