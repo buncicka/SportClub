@@ -14,5 +14,7 @@ namespace SportClub.Models
         public String Sport { get; set; }
         public string Group { get; set; }
         public DateTime EnrollmentDate { get; set; }
+
+
     }
 }

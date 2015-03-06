@@ -123,14 +123,19 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\GroupsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MembersController.cs" />
+    <Compile Include="Controllers\SportsController.cs" />
     <Compile Include="DAL\SportContext.cs" />
     <Compile Include="DAL\SportInitializer.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Enrollment.cs" />
+    <Compile Include="Models\Group.cs" />
     <Compile Include="Models\Members.cs" />
+    <Compile Include="Models\Sport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +180,16 @@
     <Content Include="Views\Members\Details.cshtml" />
     <Content Include="Views\Members\Edit.cshtml" />
     <Content Include="Views\Members\Index.cshtml" />
+    <Content Include="Views\Groups\Create.cshtml" />
+    <Content Include="Views\Groups\Delete.cshtml" />
+    <Content Include="Views\Groups\Details.cshtml" />
+    <Content Include="Views\Groups\Edit.cshtml" />
+    <Content Include="Views\Groups\Index.cshtml" />
+    <Content Include="Views\Sports\Create.cshtml" />
+    <Content Include="Views\Sports\Delete.cshtml" />
+    <Content Include="Views\Sports\Details.cshtml" />
+    <Content Include="Views\Sports\Edit.cshtml" />
+    <Content Include="Views\Sports\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

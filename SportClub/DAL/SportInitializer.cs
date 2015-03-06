@@ -22,7 +22,41 @@ namespace SportClub.DAL
             members.ForEach(m => context.MembersDb.Add(m));
             context.SaveChanges();
 
-            base.Seed(context);
+            var groups = new List<Group>
+            {
+                new Group{Title="Pro",},
+                new Group{Title="Amater"},
+                new Group{Title="Recreational"}
+            };
+            groups.ForEach(g => context.Groups.Add(g));
+            context.SaveChanges();
+
+            var enrollments = new List<Enrollment>
+            {
+                new Enrollment{MembersID=2, GroupID=2, Grade=Grade.OK},
+                new Enrollment{MembersID=3, GroupID=1, Grade=Grade.Perfect},
+                new Enrollment{MembersID=5, GroupID=3, Grade=Grade.Bad},
+                new Enrollment{MembersID=4, GroupID=2, Grade=Grade.VeryGood},
+                new Enrollment{MembersID=3, GroupID=3, Grade=Grade.Good},
+                new Enrollment{MembersID=5, GroupID=1}
+            
+            };
+            enrollments.ForEach(e => context.Enrollments.Add(e));
+            context.SaveChanges();
+
+            var sports = new List<Sport>
+            {
+                new Sport{Name="Basketball"},
+                new Sport{Name="Volleyball"},
+                new Sport{Name="Football"},
+                new Sport{Name="Swimming"}
+            };
+
+            sports.ForEach(s => context.Sports.Add(s));
+            context.SaveChanges();
+
+
+          //  base.Seed(context);
         }
     }
 }

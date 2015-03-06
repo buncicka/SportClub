@@ -15,6 +15,9 @@ namespace SportClub.DAL
 
         }
         public DbSet<Members> MembersDb { get; set; }
+        public DbSet<Enrollment> Enrollments { get; set; }
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<Sport> Sports { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
