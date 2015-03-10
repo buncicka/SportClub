@@ -22,14 +22,14 @@ namespace SportClub.DAL
             members.ForEach(m => context.MembersDb.Add(m));
             context.SaveChanges();
 
-            var groups = new List<Group>
+            /*var groups = new List<Group>
             {
                 new Group{Title="Pro",},
                 new Group{Title="Amater"},
                 new Group{Title="Recreational"}
             };
             groups.ForEach(g => context.Groups.Add(g));
-            context.SaveChanges();
+            context.SaveChanges();*/
 
             var enrollments = new List<Enrollment>
             {
