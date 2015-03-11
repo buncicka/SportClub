@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using SportClub.DAL;
 using SportClub.Models;
+using System.Data.Entity.Infrastructure;
 
 namespace SportClub.Controllers
 {
@@ -16,9 +17,18 @@ namespace SportClub.Controllers
         private SportContext db = new SportContext();
 
         // GET: Groups
-        public ActionResult Index()
+        public ActionResult Index(int? SelectedSport)
         {
-            return View(db.Groups.ToList());
+            var sports = db.Sports.OrderBy(q => q.Name).ToList();
+            ViewBag.SelectedSport = new SelectList(sports, "SportID", "Name", SelectedSport);
+            int sportID = SelectedSport.GetValueOrDefault();
+
+            IQueryable<Group> groups = db.Groups
+                .Where(c => !SelectedSport.HasValue || c.SportID == sportID)
+                .OrderBy(d => d.GroupID)
+                .Include(d => d.Sport);
+            var sql = groups.ToString();
+            return View(groups.ToList());
         }
 
         // GET: Groups/Details/5
@@ -39,6 +49,7 @@ namespace SportClub.Controllers
         // GET: Groups/Create
         public ActionResult Create()
         {
+            PopulateSportDropDownList();
             return View();
         }
 
@@ -47,15 +58,23 @@ namespace SportClub.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "GroupID,Title")] Group group)
+        public ActionResult Create([Bind(Include = "GroupID,Title, SportID")] Group group)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Groups.Add(group);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    db.Groups.Add(group);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
             }
-
+            catch (RetryLimitExceededException /* dex */)
+            {
+                //Log the error (uncomment dex variable name and add a line here to write a log.)
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+            }
+            PopulateSportDropDownList(group.SportID);
             return View(group);
         }
 
@@ -71,23 +90,48 @@ namespace SportClub.Controllers
             {
                 return HttpNotFound();
             }
+            PopulateSportDropDownList(group.SportID);
             return View(group);
         }
 
         // POST: Groups/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "GroupID,Title")] Group group)
+        public ActionResult EditPost(int? id)
         {
-            if (ModelState.IsValid)
+            if (id == null)
             {
-                db.Entry(group).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            return View(group);
+            var groupToUpdate = db.Groups.Find(id);
+            if (TryUpdateModel(groupToUpdate, "",
+               new string[] { "Title", "DepartmentID" }))
+            {
+                try
+                {
+                    db.Entry(groupToUpdate).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    return RedirectToAction("Index");
+                }
+                catch (RetryLimitExceededException /* dex */)
+                {
+                    //Log the error (uncomment dex variable name and add a line here to write a log.
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                }
+            }
+            PopulateSportDropDownList(groupToUpdate.SportID);
+            return View(groupToUpdate);
+        }
+
+        private void PopulateSportDropDownList(object selectedSport = null)
+        {
+            var departmentsQuery = from d in db.Sports
+                                   orderby d.Name
+                                   select d;
+            ViewBag.SportID = new SelectList(departmentsQuery, "SportID", "Name", selectedSport);
         }
 
         // GET: Groups/Delete/5

@@ -68,15 +68,15 @@ namespace SportClub.Migrations
             sport.ForEach(s => context.Sports.AddOrUpdate(p => p.Name, s));
             context.SaveChanges();
 
-            //var groups = new List<Group>
-            //{
-            //    new Group{GroupID=2011, Title="Pro", Instructors=new List<Instructor>() },
-            //    new Group{GroupID=2012, Title="Amater",Instructors=new List<Instructor>()},
-            //    new Group{GroupID=2013, Title="Recreational",Instructors=new List<Instructor>()},
-            //    new Group{GroupID=2014, Title="Pro", Instructors=new List<Instructor>()},
-            //};
-            //groups.ForEach(s => context.Groups.AddOrUpdate(p => p.GroupID, s));
-            //context.SaveChanges();
+            var groups = new List<Group>
+            {
+                new Group{GroupID=2011, Title="Pro",SportID = sport.Single( s => s.Name == "Swimming").SportID, Instructors=new List<Instructor>() },
+                new Group{GroupID=2012, Title="Amater",SportID = sport.Single( s => s.Name == "Football").SportID, Instructors=new List<Instructor>()},
+                new Group{GroupID=2013, Title="Recreational",SportID = sport.Single( s => s.Name == "Basketball").SportID, Instructors=new List<Instructor>()},
+                new Group{GroupID=2014, Title="Pro",SportID = sport.Single( s => s.Name == "Volleyball").SportID, Instructors=new List<Instructor>()},
+            };
+            groups.ForEach(s => context.Groups.AddOrUpdate(p => p.GroupID, s));
+            context.SaveChanges();
 
             AddOrUpdateInstructor(context, "Football", "Harui");
             AddOrUpdateInstructor(context, "Basketball", "Milic");
