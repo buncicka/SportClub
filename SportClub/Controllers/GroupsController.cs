@@ -107,7 +107,7 @@ namespace SportClub.Controllers
             }
             var groupToUpdate = db.Groups.Find(id);
             if (TryUpdateModel(groupToUpdate, "",
-               new string[] { "Title", "DepartmentID" }))
+               new string[] { "Title", "SportID" }))
             {
                 try
                 {
