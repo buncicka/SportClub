@@ -17,7 +17,7 @@ namespace SportClub.Models
         [Display(Name = "Date Of Birth")]
         public DateTime DateOfBirth { get; set; }
         
-        public String Sport { get; set; }
+        public int? SportID { get; set; }
         public string Group { get; set; }
         
         [DataType(DataType.Date)]
@@ -25,6 +25,7 @@ namespace SportClub.Models
         [Display(Name = "Enrollment Date")]
         public DateTime EnrollmentDate { get; set; }
 
+        public virtual Sport SportSelect { get; set; }
 
     }
 }

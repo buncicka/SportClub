@@ -9,6 +9,8 @@ using System.Web.Mvc;
 using SportClub.DAL;
 using SportClub.Models;
 using PagedList;
+using System.Threading.Tasks;
+using System.Data.Entity.Infrastructure;
 
 namespace SportClub.Controllers
 {
@@ -68,13 +70,14 @@ namespace SportClub.Controllers
         }
 
         // GET: Members/Details/5
-        public ActionResult Details(int? id)
+        public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Members members = db.MembersDb.Find(id);
+            string query = "SELECT * FROM Members WHERE ID = @p0";
+            Members members = await db.MembersDb.SqlQuery(query, id).SingleOrDefaultAsync();
             if (members == null)
             {
                 return HttpNotFound();
@@ -83,9 +86,9 @@ namespace SportClub.Controllers
         }
 
         // GET: Members/Create
-        [HttpGet]
         public ActionResult Create()
         {
+            ViewBag.SportID = new SelectList(db.Sports, "SportID", "Name");
             return View();
         }
 
@@ -94,7 +97,7 @@ namespace SportClub.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,FirstName,LastName,DateOfBirth,Sport,Group,EnrollmentDate")] Members members)
+        public ActionResult Create([Bind(Include = "ID,FirstName,LastName,DateOfBirth,SportID,Group,EnrollmentDate")] Members members)
         {
             if (ModelState.IsValid)
             {
@@ -102,22 +105,23 @@ namespace SportClub.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
+            ViewBag.SportID = new SelectList(db.Sports, "SportID", "Name", members.SportID);
             return View(members);
         }
 
         // GET: Members/Edit/5
-        public ActionResult Edit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Members members = db.MembersDb.Find(id);
+            Members members = await db.MembersDb.FindAsync(id);
             if (members == null)
             {
                 return HttpNotFound();
             }
+            ViewBag.SportID = new SelectList(db.Sports, "SportID", "Name", members.SportID);
             return View(members);
         }
 
@@ -126,28 +130,119 @@ namespace SportClub.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,FirstName,LastName,DateOfBirth,Sport,Group,EnrollmentDate")] Members members)
+        public async Task<ActionResult> Edit(int? id, byte[] rowVersion)
         {
-            if (ModelState.IsValid)
+            string[] fieldsToBind = new string[] { "FirstName", "LastName", "DateOfBirth", "SportID", "Group", "EnrollmentDate" };
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var memberToUpdate = await db.MembersDb.FindAsync(id);
+            if (memberToUpdate == null)
+            {
+                Members deletedMember = new Members();
+                TryUpdateModel(deletedMember, fieldsToBind);
+                ModelState.AddModelError(string.Empty,
+                    "Unable to save changes. The department was deleted by another user.");
+                ViewBag.SportID = new SelectList(db.Sports, "SportID", "Name", deletedMember.SportID);
+                return View(deletedMember);
+            }
+
+            if (TryUpdateModel(memberToUpdate, fieldsToBind))
+            {
+                try
+                {
+                    //db.Entry(sportToUpdate).OriginalValues["RowVersion"] = rowVersion;
+                    db.Entry(memberToUpdate).State = EntityState.Modified;
+                    await db.SaveChangesAsync();
+
+                    return RedirectToAction("Index");
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    var entry = ex.Entries.Single();
+                    var clientValues = (Members)entry.Entity;
+                    var databaseEntry = entry.GetDatabaseValues();
+                    if (databaseEntry == null)
+                    {
+                        ModelState.AddModelError(string.Empty,
+                            "Unable to save changes. The department was deleted by another user.");
+                    }
+                    else
+                    {
+                        var databaseValues = (Members)databaseEntry.ToObject();
+
+                        if (databaseValues.FirstName != clientValues.FirstName)
+                            ModelState.AddModelError("FirstName", "Current value: "
+                                + databaseValues.FirstName);
+                        if (databaseValues.LastName != clientValues.LastName)
+                            ModelState.AddModelError("LastName", "Current value: "
+                                + databaseValues.LastName);
+                        if (databaseValues.DateOfBirth != clientValues.DateOfBirth)
+                            ModelState.AddModelError("DateOfBird", "Current value: "
+                                + String.Format("{0:c}", databaseValues.DateOfBirth));
+                        if (databaseValues.SportID != clientValues.SportID)
+                            ModelState.AddModelError("SportID", "Current value: "
+                                + db.Sports.Find(databaseValues.SportID).Name);
+                        if (databaseValues.FirstName != clientValues.Group)
+                            ModelState.AddModelError("Group", "Current value: "
+                                + databaseValues.Group);
+                        if (databaseValues.EnrollmentDate != clientValues.EnrollmentDate)
+                            ModelState.AddModelError("EnrollmentDate", "Current value: "
+                                + String.Format("{0:d}", databaseValues.EnrollmentDate));
+                        ModelState.AddModelError(string.Empty, "The record you attempted to edit "
+                            + "was modified by another user after you got the original value. The "
+                            + "edit operation was canceled and the current values in the database "
+                            + "have been displayed. If you still want to edit this record, click "
+                            + "the Save button again. Otherwise click the Back to List hyperlink.");
+                        //sportToUpdate.RowVersion = databaseValues.RowVersion;
+                    }
+                }
+                catch (RetryLimitExceededException /* dex */)
+                {
+                    //Log the error (uncomment dex variable name and add a line here to write a log.
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                }
+            }
+            ViewBag.SportID = new SelectList(db.Sports, "SportID", "Name", memberToUpdate.SportID);
+            return View(memberToUpdate);
+
+
+            //[Bind(Include = "ID,FirstName,LastName,DateOfBirth,Sport,Group,EnrollmentDate")] Members members
+            /*if (ModelState.IsValid)
             {
                 db.Entry(members).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(members);
+            return View(members);*/
         }
 
         // GET: Members/Delete/5
-        public ActionResult Delete(int? id)
+        public async Task<ActionResult> Delete(int? id, bool? concurrencyError)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Members members = db.MembersDb.Find(id);
+            Members members =await db.MembersDb.FindAsync(id);
             if (members == null)
             {
+                if (concurrencyError.GetValueOrDefault())
+                {
+                    return RedirectToAction("Index");
+                }
                 return HttpNotFound();
+            }
+            if (concurrencyError.GetValueOrDefault())
+            {
+                ViewBag.ConcurrencyErrorMessage = "The record you attempted to delete "
+                    + "was modified by another user after you got the original values. "
+                    + "The delete operation was canceled and the current values in the "
+                    + "database have been displayed. If you still want to delete this "
+                    + "record, click the Delete button again. Otherwise "
+                    + "click the Back to List hyperlink.";
             }
             return View(members);
         }
@@ -155,12 +250,24 @@ namespace SportClub.Controllers
         // POST: Members/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(Members members)
         {
-            Members members = db.MembersDb.Find(id);
-            db.MembersDb.Remove(members);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            try
+            {
+                db.Entry(members).State = EntityState.Deleted;
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return RedirectToAction("Delete", new { concurrencyError = true, id = members.ID });
+            }
+            catch (DataException /* dex */)
+            {
+                //Log the error (uncomment dex variable name after DataException and add a line here to write a log.
+                ModelState.AddModelError(string.Empty, "Unable to delete. Try again, and if the problem persists contact your system administrator.");
+                return View(members);
+            }
         }
 
         protected override void Dispose(bool disposing)

@@ -29,24 +29,7 @@ namespace SportClub.Migrations
               //  );
             
 
-            var members = new List<Members>
-            {
-                new Members{FirstName="Ivana", LastName="Buncic", DateOfBirth=DateTime.Parse("1989-12-25"), Group="Pro", Sport="Volleyball", EnrollmentDate=DateTime.Parse("2009-05-01")},
-                new Members{FirstName="Milica", LastName="Cvejic", DateOfBirth=DateTime.Parse("1989-10-09"), Group="Amater", Sport="Football", EnrollmentDate=DateTime.Parse("2007-05-01")},
-                new Members{FirstName="Milan", LastName="Nikolic", DateOfBirth=DateTime.Parse("1985-07-15"), Group="Recreational", Sport="Swimming", EnrollmentDate=DateTime.Parse("2005-01-01")},
-                new Members{FirstName="Zoran", LastName="Lukic", DateOfBirth=DateTime.Parse("1992-07-25"), Group="Recreational", Sport="Basketball", EnrollmentDate=DateTime.Parse("2014-07-30")},
-                new Members{FirstName="Nenad", LastName="Kojic", DateOfBirth=DateTime.Parse("1994-11-02"), Group="Pro", Sport="Volleyball", EnrollmentDate=DateTime.Parse("2006-07-18")},
-                new Members{FirstName="Nikola", LastName="Savic", DateOfBirth=DateTime.Parse("1990-09-22"), Group="Amater", Sport="Swimming", EnrollmentDate=DateTime.Parse("2011-08-22")},
-                new Members{FirstName="Ivica", LastName="Ninkovic", DateOfBirth=DateTime.Parse("1991-05-16"), Group="Recreational", Sport="Basketball", EnrollmentDate=DateTime.Parse("2012-11-02")},
-                new Members{FirstName="Tamara", LastName="Has", DateOfBirth=DateTime.Parse("1987-10-01"), Group="Pro", Sport="Football", EnrollmentDate=DateTime.Parse("2007-03-10")},
-                new Members{FirstName="Patricija", LastName="Todic", DateOfBirth=DateTime.Parse("1989-12-12"), Group="Amater", Sport="Volleyball", EnrollmentDate=DateTime.Parse("2013-02-27")},
-                new Members{FirstName="Suzana", LastName="Pajic", DateOfBirth=DateTime.Parse("1986-09-27"), Group="Recreational", Sport="Basketball", EnrollmentDate=DateTime.Parse("2014-05-11")},
-                new Members{FirstName="Dragan", LastName="Mitrovic", DateOfBirth=DateTime.Parse("1965-06-21"), Group="Pro", Sport="Football", EnrollmentDate=DateTime.Parse("2006-08-01")},
-                new Members{FirstName="Andrija", LastName="Kolundzija", DateOfBirth=DateTime.Parse("1990-06-22"), Group="Amater", Sport="Swimming", EnrollmentDate=DateTime.Parse("2015-03-03")},
-            };
-
-            members.ForEach(s => context.MembersDb.AddOrUpdate(p => p.LastName, s));
-            context.SaveChanges();
+            
 
             var instructors = new List<Instructor>
             {
@@ -83,6 +66,25 @@ namespace SportClub.Migrations
             AddOrUpdateInstructor(context, "Swimming", "Gajanin");
             AddOrUpdateInstructor(context, "Volleyball", "Ubavin");
 
+            context.SaveChanges();
+
+            var members = new List<Members>
+            {
+                new Members{FirstName="Ivana", LastName="Buncic", DateOfBirth=DateTime.Parse("1989-12-25"), Group="Pro",SportID=sport.Single(i=> i.Name=="Football").SportID, EnrollmentDate=DateTime.Parse("2009-05-01")},
+                new Members{FirstName="Milica", LastName="Cvejic", DateOfBirth=DateTime.Parse("1989-10-09"), Group="Amater", SportID=sport.Single(i=> i.Name=="Football").SportID, EnrollmentDate=DateTime.Parse("2007-05-01")},
+                new Members{FirstName="Milan", LastName="Nikolic", DateOfBirth=DateTime.Parse("1985-07-15"), Group="Recreational", SportID=sport.Single(i=> i.Name=="Swimming").SportID, EnrollmentDate=DateTime.Parse("2005-01-01")},
+                new Members{FirstName="Zoran", LastName="Lukic", DateOfBirth=DateTime.Parse("1992-07-25"), Group="Recreational",SportID=sport.Single(i=> i.Name=="Basketball").SportID , EnrollmentDate=DateTime.Parse("2014-07-30")},
+                new Members{FirstName="Nenad", LastName="Kojic", DateOfBirth=DateTime.Parse("1994-11-02"), Group="Pro",SportID=sport.Single(i=> i.Name== "Volleyball").SportID, EnrollmentDate=DateTime.Parse("2006-07-18")},
+                new Members{FirstName="Nikola", LastName="Savic", DateOfBirth=DateTime.Parse("1990-09-22"), Group="Amater", SportID=sport.Single(i=> i.Name== "Swimming").SportID, EnrollmentDate=DateTime.Parse("2011-08-22")},
+                new Members{FirstName="Ivica", LastName="Ninkovic", DateOfBirth=DateTime.Parse("1991-05-16"), Group="Recreational", SportID=sport.Single(i=> i.Name== "Basketball").SportID, EnrollmentDate=DateTime.Parse("2012-11-02")},
+                new Members{FirstName="Tamara", LastName="Has", DateOfBirth=DateTime.Parse("1987-10-01"), Group="Pro", SportID=sport.Single(i=> i.Name== "Football").SportID, EnrollmentDate=DateTime.Parse("2007-03-10")},
+                new Members{FirstName="Patricija", LastName="Todic", DateOfBirth=DateTime.Parse("1989-12-12"), Group="Amater", SportID=sport.Single(i=> i.Name== "Volleyball").SportID, EnrollmentDate=DateTime.Parse("2013-02-27")},
+                new Members{FirstName="Suzana", LastName="Pajic", DateOfBirth=DateTime.Parse("1986-09-27"), Group="Recreational",SportID=sport.Single(i=> i.Name== "Basketball").SportID, EnrollmentDate=DateTime.Parse("2014-05-11")},
+                new Members{FirstName="Dragan", LastName="Mitrovic", DateOfBirth=DateTime.Parse("1965-06-21"), Group="Pro", SportID=sport.Single(i=> i.Name=="Football").SportID, EnrollmentDate=DateTime.Parse("2006-08-01")},
+                new Members{FirstName="Andrija", LastName="Kolundzija", DateOfBirth=DateTime.Parse("1990-06-22"), Group="Amater", SportID=sport.Single(i=> i.Name=="Swimming").SportID, EnrollmentDate=DateTime.Parse("2015-03-03")},
+            };
+
+            members.ForEach(s => context.MembersDb.AddOrUpdate(p => p.LastName, s));
             context.SaveChanges();
 
             //var enrollments = new List<Enrollment>

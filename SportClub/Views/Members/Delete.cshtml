@@ -36,11 +36,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Sport)
+            @Html.DisplayNameFor(model => model.SportSelect.Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Sport)
+            @Html.DisplayFor(model => model.SportSelect.Name)
         </dd>
 
         <dt>
@@ -63,7 +63,7 @@
 
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
-
+        @Html.HiddenFor(model => model.ID)
         <div class="form-actions no-color">
             <input type="submit" value="Delete" class="btn btn-default" /> |
             @Html.ActionLink("Back to List", "Index")
