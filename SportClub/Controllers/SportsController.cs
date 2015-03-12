@@ -21,19 +21,18 @@ namespace SportClub.Controllers
         public async Task<ActionResult> Index()
         {
             var sports = db.Sports.Include(d => d.Administrator);
-            return View(await sports.ToListAsync());
+            return View(await sports.ToListAsync());  
         }
 
         // GET: Sports/Details/5
-        public async Task<ActionResult> Details(int? id)
+        public async  Task<ActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            //Sport sport = await db.Sports.FindAsync(id);
+            //Sport sport =  db.Sports.Find(id);
 
-            //Department department = await db.Departments.FindAsync(id);
             string query = "SELECT * FROM Sport WHERE SportID = @p0";
             Sport sport = await db.Sports.SqlQuery(query, id).SingleOrDefaultAsync();
 
@@ -47,7 +46,7 @@ namespace SportClub.Controllers
         // GET: Sports/Create
         public ActionResult Create()
         {
-            ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "FirstName");
+            ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "LastName");
             return View();
         }
 
@@ -56,15 +55,16 @@ namespace SportClub.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "SportID,Name, Price, StartDate, InstructorID")] Sport sport)
+        public async Task<ActionResult> Create([Bind(Include = "SportID, Name, StartDate, Price, InstructorID")] Sport sport)
         {
+            
             if (ModelState.IsValid)
             {
                 db.Sports.Add(sport);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "FirstName",  sport.InstructorID);
+            ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "LastName", sport.InstructorID);
             return View(sport);
         }
 
@@ -79,17 +79,16 @@ namespace SportClub.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "FirstName", sport.InstructorID);
+            ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "LastName", sport.InstructorID);
             return View(sport);
         }
 
-
+        // GET: Sports/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        // GET: Sports/Edit/5
         public async Task<ActionResult> Edit(int? id, byte[] rowVersion)
         {
-            string[] fieldsToBind = new string[] { "Name", "Price", "StartDate", "InstructorID", "RowVersion" };
+            string[] fieldsToBind = new string[] { "Name", "StartDate", "Price", "InstructorID"};
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -102,7 +101,7 @@ namespace SportClub.Controllers
                 TryUpdateModel(deletedSport, fieldsToBind);
                 ModelState.AddModelError(string.Empty,
                     "Unable to save changes. The department was deleted by another user.");
-                ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "FirstName", deletedSport.InstructorID);
+                ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "LastName", deletedSport.InstructorID);
                 return View(deletedSport);
             }
 
@@ -133,15 +132,15 @@ namespace SportClub.Controllers
                         if (databaseValues.Name != clientValues.Name)
                             ModelState.AddModelError("Name", "Current value: "
                                 + databaseValues.Name);
-                        if (databaseValues.Price != clientValues.Price)
-                            ModelState.AddModelError("Price", "Current value: "
-                                + String.Format("{0:c}", databaseValues.Price));
                         if (databaseValues.StartDate != clientValues.StartDate)
                             ModelState.AddModelError("StartDate", "Current value: "
                                 + String.Format("{0:d}", databaseValues.StartDate));
+                        if (databaseValues.Price != clientValues.Price)
+                            ModelState.AddModelError("Price", "Current value: "
+                                + String.Format("{0:c}", databaseValues.Price));
                         if (databaseValues.InstructorID != clientValues.InstructorID)
                             ModelState.AddModelError("InstructorID", "Current value: "
-                                + db.Instructors.Find(databaseValues.InstructorID).FirtName);
+                                + db.Instructors.Find(databaseValues.InstructorID).LastName);
                         ModelState.AddModelError(string.Empty, "The record you attempted to edit "
                             + "was modified by another user after you got the original value. The "
                             + "edit operation was canceled and the current values in the database "
@@ -156,14 +155,8 @@ namespace SportClub.Controllers
                     ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
                 }
             }
-            ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "FirstName", sportToUpdate.InstructorID);
+            ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "LastName", sportToUpdate.InstructorID);
             return View(sportToUpdate);
-            /*Sport sport = db.Sports.Find(id);
-            if (sport == null)
-            {
-                return HttpNotFound();
-            }
-            return View(sport);*/
         }
 
         // POST: Sports/Edit/5
@@ -223,7 +216,6 @@ namespace SportClub.Controllers
                 return View(sport);
             }
         }
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -232,5 +224,9 @@ namespace SportClub.Controllers
             }
             base.Dispose(disposing);
         }
+
+        public object SelectedInstructor { get; set; }
+
+        public int? InstructorID { get; set; }
     }
 }

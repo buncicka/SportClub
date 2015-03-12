@@ -25,5 +25,7 @@ namespace SportClub.Models
 
         public virtual Instructor Administrator { get; set; }
         public virtual ICollection<Group> Groups { get; set; }
+
+        public Instructor Instructor { get; set; }
     }
 }

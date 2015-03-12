@@ -31,7 +31,7 @@ namespace SportClub.DAL
             groups.ForEach(g => context.Groups.Add(g));
             context.SaveChanges();*/
 
-            var enrollments = new List<Enrollment>
+           /* var enrollments = new List<Enrollment>
             {
                 new Enrollment{MembersID=2, GroupID=2, Grade=Grade.OK},
                 new Enrollment{MembersID=3, GroupID=1, Grade=Grade.Perfect},
@@ -42,7 +42,16 @@ namespace SportClub.DAL
             
             };
             enrollments.ForEach(e => context.Enrollments.Add(e));
-            context.SaveChanges();
+            context.SaveChanges();*/
+           /* var instructors = new List<Instructor>
+            {
+                new Instructor{ FirtName="Kim", LastName="Harui", Date=DateTime.Parse("2011-02-22")},
+                new Instructor{ FirtName="Stefan", LastName="Milic", Date=DateTime.Parse("2009-11-02")},
+                new Instructor{ FirtName="Branko", LastName="Gajanin", Date=DateTime.Parse("2004-09-18")},
+                new Instructor{ FirtName="Jovan", LastName="Ubavin", Date=DateTime.Parse("2006-09-11")},
+            };
+            instructors.ForEach(s => context.Instructors.AddOrUpdate(p => p.LastName, s));
+            context.SaveChanges();*/
 
             var sports = new List<Sport>
             {
