@@ -13,6 +13,7 @@ namespace SportClub.Models
 
         [StringLength(50, MinimumLength = 3)]
         public string Name { get; set; }
+
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Start Date")]
@@ -23,9 +24,12 @@ namespace SportClub.Models
 
         public int? InstructorID { get; set; }
 
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
+
         public virtual Instructor Administrator { get; set; }
         public virtual ICollection<Group> Groups { get; set; }
 
-        public Instructor Instructor { get; set; }
+        //public virtual Instructor Instructor { get; set; }
     }
 }

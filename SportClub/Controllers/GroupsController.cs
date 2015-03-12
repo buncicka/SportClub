@@ -105,6 +105,7 @@ namespace SportClub.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            
             var groupToUpdate = db.Groups.Find(id);
             if (TryUpdateModel(groupToUpdate, "",
                new string[] { "Title", "SportID" }))
@@ -122,6 +123,7 @@ namespace SportClub.Controllers
                     ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
                 }
             }
+
             PopulateSportDropDownList(groupToUpdate.SportID);
             return View(groupToUpdate);
         }
@@ -131,6 +133,7 @@ namespace SportClub.Controllers
             var departmentsQuery = from d in db.Sports
                                    orderby d.Name
                                    select d;
+
             ViewBag.SportID = new SelectList(departmentsQuery, "SportID", "Name", selectedSport);
         }
 
@@ -141,11 +144,13 @@ namespace SportClub.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Group group = db.Groups.Find(id);
             if (group == null)
             {
                 return HttpNotFound();
             }
+
             return View(group);
         }
 

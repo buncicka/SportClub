@@ -14,6 +14,7 @@ namespace SportClub.DAL
         {
 
         }
+
         public DbSet<Members> MembersDb { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }
         public DbSet<Instructor> Instructors { get; set; }
@@ -24,9 +25,9 @@ namespace SportClub.DAL
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             modelBuilder.Entity<Group>()
-           .HasMany(c => c.Instructors).WithMany(i => i.Groups)
-           .Map(t => t.MapLeftKey("CourseID")
-               .MapRightKey("InstructorID")
+                .HasMany(c => c.Instructors).WithMany(i => i.Groups)
+                .Map(t => t.MapLeftKey("CourseID")
+                .MapRightKey("InstructorID")
                 .ToTable("CourseInstructor"));
         }
     }
