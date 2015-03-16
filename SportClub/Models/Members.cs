@@ -9,7 +9,11 @@ namespace SportClub.Models
     public class Members
     {
         public int ID { get; set; }
+
+        [StringLength(50, ErrorMessage = "First name cannot be longer than 50 characters.")]
         public string FirstName { get; set; }
+
+        [StringLength(50, ErrorMessage = "Last name cannot be longer than 50 characters.")]
         public string LastName { get; set; }
         
         [DataType(DataType.Date)]
