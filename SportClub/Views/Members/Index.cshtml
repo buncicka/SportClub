@@ -23,10 +23,10 @@
 <table class="table table-condensed table-striped">
     <tr>  
         <th>
-            @Html.ActionLink("First Name", "Index", new { sortOrder = ViewBag.NameSortParm })
+            @Html.ActionLink("First Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.LastNameSortParm })
+            @Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.LastNameSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
             Date of Birth
@@ -38,7 +38,7 @@
            Group
         </th>
         <th>
-            @Html.ActionLink("Enrollment Date", "Index", new { sortOrder = ViewBag.DateSortParm })
+            @Html.ActionLink("Enrollment Date", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th></th>
     </tr>

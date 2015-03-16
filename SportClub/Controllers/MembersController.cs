@@ -19,8 +19,8 @@ namespace SportClub.Controllers
         private SportContext db = new SportContext();
 
         // GET: Members
-        [HttpGet]
-        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
+        //[HttpGet]
+        public ViewResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
 
