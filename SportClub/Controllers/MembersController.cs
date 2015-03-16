@@ -89,6 +89,7 @@ namespace SportClub.Controllers
         public ActionResult Create()
         {
             ViewBag.SportID = new SelectList(db.Sports, "SportID", "Name");
+            ViewBag.GroupID = new SelectList(db.Groups, "GroupID", "Title");
             return View();
         }
 
@@ -97,7 +98,7 @@ namespace SportClub.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,FirstName,LastName,DateOfBirth,SportID,Group,EnrollmentDate")] Members members)
+        public ActionResult Create([Bind(Include = "ID,FirstName,LastName,DateOfBirth,SportID,GroupID,EnrollmentDate")] Members members)
         {
             if (ModelState.IsValid)
             {
@@ -106,6 +107,7 @@ namespace SportClub.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.SportID = new SelectList(db.Sports, "SportID", "Name", members.SportID);
+            ViewBag.GroupID = new SelectList(db.Groups, "GroupID", "Title", members.GroupID);
             return View(members);
         }
 
@@ -122,6 +124,7 @@ namespace SportClub.Controllers
                 return HttpNotFound();
             }
             ViewBag.SportID = new SelectList(db.Sports, "SportID", "Name", members.SportID);
+            ViewBag.GroupID = new SelectList(db.Groups, "GroupID", "Title", members.GroupID);
             return View(members);
         }
 
@@ -132,7 +135,7 @@ namespace SportClub.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(int? id, byte[] rowVersion)
         {
-            string[] fieldsToBind = new string[] { "FirstName", "LastName", "DateOfBirth", "SportID", "Group", "EnrollmentDate" };
+            string[] fieldsToBind = new string[] { "FirstName", "LastName", "DateOfBirth", "SportID", "GroupID", "EnrollmentDate" };
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -146,6 +149,7 @@ namespace SportClub.Controllers
                 ModelState.AddModelError(string.Empty,
                     "Unable to save changes. The department was deleted by another user.");
                 ViewBag.SportID = new SelectList(db.Sports, "SportID", "Name", deletedMember.SportID);
+                ViewBag.GroupID = new SelectList(db.Groups, "GroupID", "Title", deletedMember.GroupID);
                 return View(deletedMember);
             }
 
@@ -185,9 +189,9 @@ namespace SportClub.Controllers
                         if (databaseValues.SportID != clientValues.SportID)
                             ModelState.AddModelError("SportID", "Current value: "
                                 + db.Sports.Find(databaseValues.SportID).Name);
-                        if (databaseValues.FirstName != clientValues.Group)
-                            ModelState.AddModelError("Group", "Current value: "
-                                + databaseValues.Group);
+                        if (databaseValues.GroupID != clientValues.GroupID)
+                            ModelState.AddModelError("GroupID", "Current value: "
+                                + db.Groups.Find(databaseValues.GroupID).Title);
                         if (databaseValues.EnrollmentDate != clientValues.EnrollmentDate)
                             ModelState.AddModelError("EnrollmentDate", "Current value: "
                                 + String.Format("{0:d}", databaseValues.EnrollmentDate));
@@ -206,6 +210,7 @@ namespace SportClub.Controllers
                 }
             }
             ViewBag.SportID = new SelectList(db.Sports, "SportID", "Name", memberToUpdate.SportID);
+            ViewBag.GroupID = new SelectList(db.Groups, "GroupID", "Title", memberToUpdate.GroupID);
             return View(memberToUpdate);
 
 

@@ -18,7 +18,8 @@ namespace SportClub.Models
         public DateTime DateOfBirth { get; set; }
         
         public int? SportID { get; set; }
-        public string Group { get; set; }
+
+        public int? GroupID { get; set; }
         
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
@@ -26,6 +27,8 @@ namespace SportClub.Models
         public DateTime EnrollmentDate { get; set; }
 
         public virtual Sport SportSelect { get; set; }
+        public virtual Group GroupSelect { get; set; }
 
+        //public int Group { get; set; }
     }
 }

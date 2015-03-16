@@ -20,7 +20,7 @@
         <input type="submit" value="Search" />
     </p>
 }
-<table class="table">
+<table class="table table-condensed table-striped">
     <tr>  
         <th>
             @Html.ActionLink("First Name", "Index", new { sortOrder = ViewBag.NameSortParm })
@@ -58,7 +58,7 @@
             @Html.DisplayFor(modelItem => item.SportSelect.Name)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Group)
+            @Html.DisplayFor(modelItem => item.GroupSelect.Title)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.EnrollmentDate)
