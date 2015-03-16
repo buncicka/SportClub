@@ -22,6 +22,7 @@ namespace SportClub.Models
         [Column(TypeName = "money")]
         public decimal Price { get; set; }
 
+        [Display(Name = "Instructor")]
         public int? InstructorID { get; set; }
 
         [Timestamp]

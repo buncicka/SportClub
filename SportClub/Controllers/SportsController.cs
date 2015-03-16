@@ -195,26 +195,14 @@ namespace SportClub.Controllers
         }
 
         // POST: Sports/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(Sport sport)
+        public async Task<ActionResult> Delete(int id)
         {
-            try
-            {
-                db.Entry(sport).State = EntityState.Deleted;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                return RedirectToAction("Delete", new { concurrencyError = true, id = sport.SportID });
-            }
-            catch (DataException /* dex */)
-            {
-                //Log the error (uncomment dex variable name after DataException and add a line here to write a log.
-                ModelState.AddModelError(string.Empty, "Unable to delete. Try again, and if the problem persists contact your system administrator.");
-                return View(sport);
-            }
+            Sport sport = db.Sports.Find(id);
+            db.Sports.Remove(sport);
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
         protected override void Dispose(bool disposing)
         {
