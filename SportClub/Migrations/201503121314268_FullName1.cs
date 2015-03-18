@@ -3,7 +3,7 @@ namespace SportClub.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class MaxLengthOnNames : DbMigration
+    public partial class FullName1 : DbMigration
     {
         public override void Up()
         {

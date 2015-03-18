@@ -120,13 +120,13 @@ namespace SportClub.Controllers
 
             db.Instructors.Remove(instructor);
 
-            var department = db.Sports
-                .Where(d => d.InstructorID == id)
-                .SingleOrDefault();
-            if (department != null)
-            {
-                department.InstructorID = null;
-            }
+            //var department = db.Sports
+            //    .Where(d => d.InstructorID == id)
+            //    .SingleOrDefault();
+            //if (department != null)
+            //{
+            //    department.InstructorID = null;
+            //}
 
             db.SaveChanges();
             return RedirectToAction("Index");

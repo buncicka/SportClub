@@ -24,11 +24,17 @@ namespace SportClub.DAL
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
-            modelBuilder.Entity<Group>()
-                .HasMany(c => c.Instructors).WithMany(i => i.Groups)
+           /* modelBuilder.Entity<Group>()
+               .HasMany(c => c.Instructors).WithMany(i => i.Groups)
                 .Map(t => t.MapLeftKey("CourseID")
                 .MapRightKey("InstructorID")
-                .ToTable("CourseInstructor"));
+                .ToTable("GroupInstructor"));*/
+            modelBuilder.Entity<Sport>()
+                 .HasMany(c => c.Instructors).WithMany(i => i.Sports)
+                 .Map(t => t.MapLeftKey("SportID")
+                 .MapRightKey("ID")
+                 .ToTable("SportInstructor"));
+            
         }
     }
 }

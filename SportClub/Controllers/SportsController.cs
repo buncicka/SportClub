@@ -20,8 +20,8 @@ namespace SportClub.Controllers
         // GET: Sports
         public async Task<ActionResult> Index()
         {
-            var sports = db.Sports.Include(d => d.Administrator);
-            return View(await sports.ToListAsync());  
+            
+            return View(await db.Sports.ToListAsync());  
         }
 
         // GET: Sports/Details/5
@@ -46,7 +46,7 @@ namespace SportClub.Controllers
         // GET: Sports/Create
         public ActionResult Create()
         {
-            ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "LastName");
+            //ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "LastName");
             return View();
         }
 
@@ -55,7 +55,7 @@ namespace SportClub.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "SportID, Name, StartDate, Price, InstructorID")] Sport sport)
+        public async Task<ActionResult> Create([Bind(Include = "SportID, Name, StartDate, Price")] Sport sport)
         {
             
             if (ModelState.IsValid)
@@ -64,7 +64,7 @@ namespace SportClub.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "LastName", sport.InstructorID);
+           // ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "LastName");
             return View(sport);
         }
 
@@ -79,7 +79,7 @@ namespace SportClub.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "LastName", sport.InstructorID);
+           // ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "LastName");
             return View(sport);
         }
 
@@ -88,7 +88,7 @@ namespace SportClub.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(int? id, byte[] rowVersion)
         {
-            string[] fieldsToBind = new string[] { "Name", "StartDate", "Price", "InstructorID"};
+            string[] fieldsToBind = new string[] { "Name", "StartDate", "Price"};
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -101,7 +101,7 @@ namespace SportClub.Controllers
                 TryUpdateModel(deletedSport, fieldsToBind);
                 ModelState.AddModelError(string.Empty,
                     "Unable to save changes. The department was deleted by another user.");
-                ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "LastName", deletedSport.InstructorID);
+                //ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "LastName");
                 return View(deletedSport);
             }
 
@@ -138,9 +138,6 @@ namespace SportClub.Controllers
                         if (databaseValues.Price != clientValues.Price)
                             ModelState.AddModelError("Price", "Current value: "
                                 + String.Format("{0:c}", databaseValues.Price));
-                        if (databaseValues.InstructorID != clientValues.InstructorID)
-                            ModelState.AddModelError("InstructorID", "Current value: "
-                                + db.Instructors.Find(databaseValues.InstructorID).LastName);
                         ModelState.AddModelError(string.Empty, "The record you attempted to edit "
                             + "was modified by another user after you got the original value. The "
                             + "edit operation was canceled and the current values in the database "
@@ -155,7 +152,7 @@ namespace SportClub.Controllers
                     ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
                 }
             }
-            ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "LastName", sportToUpdate.InstructorID);
+           // ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "LastName");
             return View(sportToUpdate);
         }
 
@@ -206,15 +203,11 @@ namespace SportClub.Controllers
         }
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
+            if (db!= null)
             {
                 db.Dispose();
             }
             base.Dispose(disposing);
         }
-
-        public object SelectedInstructor { get; set; }
-
-        public int? InstructorID { get; set; }
     }
 }

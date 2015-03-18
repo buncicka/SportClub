@@ -43,10 +43,10 @@ namespace SportClub.Migrations
 
             var sport = new List<Sport>
             {
-                new Sport{ Name="Football", Price=2000, StartDate=DateTime.Parse("2015-10-03"), InstructorID=instructors.Single(i=> i.LastName=="Milic").ID,  },
-                new Sport{ Name="Volleyball", Price=3000, StartDate=DateTime.Parse("2015-08-03"), InstructorID=instructors.Single(i=> i.LastName=="Harui").ID,  },
-                new Sport{ Name="Swimming", Price=3500, StartDate=DateTime.Parse("2002-11-03"), InstructorID=instructors.Single(i=> i.LastName=="Gajanin").ID,   },
-                new Sport{ Name="Basketball", Price=4000, StartDate=DateTime.Parse("2008-10-12"), InstructorID=instructors.Single(i=> i.LastName=="Ubavin").ID, },
+                new Sport{ Name="Football", Price=2000, StartDate=DateTime.Parse("2015-10-03"), Instructors=new List<Instructor>() },
+                new Sport{ Name="Volleyball", Price=3000, StartDate=DateTime.Parse("2015-08-03"), Instructors=new List<Instructor>(),  },
+                new Sport{ Name="Swimming", Price=3500, StartDate=DateTime.Parse("2002-11-03"),  Instructors=new List<Instructor>(),   },
+                new Sport{ Name="Basketball", Price=4000, StartDate=DateTime.Parse("2008-10-12"),  Instructors=new List<Instructor>(), },
             };
             sport.ForEach(s => context.Sports.AddOrUpdate(p => p.Name, s));
             context.SaveChanges();

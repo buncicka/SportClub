@@ -20,10 +20,6 @@
         <th>
             @Html.DisplayNameFor(model => model.Price)
         </th>
-        <th>
-            @*@Html.DisplayNameFor(model => model.InstructorID)*@
-            Instructor
-        </th>
         <th></th>
     </tr>
 
@@ -40,12 +36,8 @@
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Administrator.LastName)
-            </td>
-
-            <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.SportID }) |
-                @Html.ActionLink("Details", "Details", new { id = item.SportID }) |
+                @Html.ActionLink("AddInstructors", "AddInstructors", new { id = item.SportID }) |
                 @Html.ActionLink("Delete", "Delete", new { id = item.SportID })
             </td>
         </tr>
