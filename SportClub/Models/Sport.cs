@@ -23,7 +23,7 @@ namespace SportClub.Models
         public decimal Price { get; set; }
 
         //[Display(Name = "Instructor")]
-        //public int? InstructorID { get; set; }
+        public int? InstructorID { get; set; }
 
         [Timestamp]
         public byte[] RowVersion { get; set; }

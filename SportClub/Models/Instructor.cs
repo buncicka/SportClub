@@ -25,6 +25,7 @@ namespace SportClub.Models
 
         public virtual ICollection<Sport> Sports { get; set; }
         public virtual ICollection<Group> Groups { get; set; }
+        public virtual ICollection<Enrollment> Enrollments { get; set; }
 
     }
 }

@@ -33,6 +33,8 @@ namespace SportClub.Models
         public virtual Sport SportSelect { get; set; }
         public virtual Group GroupSelect { get; set; }
 
+        public virtual ICollection<Enrollment> Enrollments { get; set; }
+
         //public int Group { get; set; }
     }
 }

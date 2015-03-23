@@ -1,4 +1,5 @@
-﻿@model IEnumerable<SportClub.Models.Sport>
+﻿@*@model IEnumerable<SportClub.Models.Sport>*@
+@model SportClub.ViewModels.SportIndexData
 
 @{
     ViewBag.Title = "Sports";
@@ -9,23 +10,23 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table table-condensed table-striped">
+<table class="table">
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.StartDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Price)
-        </th>
+        <th>Name</th>
+        <th>Start date</th>
+        <th>Price</th>
+        <th>Instructors</th>
         <th></th>
     </tr>
 
-    @foreach (var item in Model)
+    @foreach (var item in Model.Sports)
     {
-        <tr>
+        string selectedRow = "";
+        if (item.SportID == ViewBag.SportID)
+        {
+            selectedRow = "success";
+        }
+        <tr class="@selectedRow">
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
@@ -36,11 +37,57 @@
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
+                @{
+                  foreach (var instructor in item.Instructors)
+                  {
+                        @instructor.ID @:  @instructor.LastName<br />
+                  }
+                 }
+            </td>
+
+            <td>
+                @Html.ActionLink("Select", "Index", new { id = item.SportID }) |
                 @Html.ActionLink("Edit", "Edit", new { id = item.SportID }) |
-                @Html.ActionLink("AddInstructors", "AddInstructors", new { id = item.SportID }) |
+                @Html.ActionLink("Add instructors", "AddInstructors", new { id = item.SportID }) |
                 @Html.ActionLink("Delete", "Delete", new { id = item.SportID })
             </td>
         </tr>
     }
 
 </table>
+
+
+
+
+
+@if (Model.Instructors != null)
+{
+    <h3>Instructors taught by Selected Sport</h3>
+    <table class="table">
+        <tr>
+            <th></th>
+            <th>Number</th>
+            <th>Last Name</th>
+        </tr>
+
+        @foreach (var item in Model.Instructors)
+        {
+            string selectedRow = "";
+            if (item.ID == ViewBag.InstructorID)
+            {
+                selectedRow = "success";
+            }
+            <tr class="@selectedRow">
+                <td>
+                    @item.ID
+                </td>
+                <td>
+                    @item.LastName
+                </td>
+
+            </tr>
+        }
+
+    </table>
+}
+

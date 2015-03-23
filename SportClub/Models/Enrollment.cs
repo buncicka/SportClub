@@ -19,5 +19,6 @@ namespace SportClub.Models
 
         public virtual Group Group { get; set; }
         public virtual Members Members { get; set; }
+        public virtual ICollection<Enrollment> Enrollments { get; set; }
     }
 }
