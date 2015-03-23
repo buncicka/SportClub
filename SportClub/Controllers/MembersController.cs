@@ -19,7 +19,6 @@ namespace SportClub.Controllers
         private SportContext db = new SportContext();
 
         // GET: Members
-        //[HttpGet]
         public ViewResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
@@ -69,7 +68,7 @@ namespace SportClub.Controllers
             return View(members.ToPagedList(pageNumber, pageSize));
         }
 
-        // GET: Members/Details/5
+        // GET: Members/Details
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -94,8 +93,6 @@ namespace SportClub.Controllers
         }
 
         // POST: Members/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID,FirstName,LastName,DateOfBirth,SportID,GroupID,EnrollmentDate")] Members members)
@@ -128,9 +125,7 @@ namespace SportClub.Controllers
             return View(members);
         }
 
-        // POST: Members/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Members/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(int? id, byte[] rowVersion)
@@ -147,7 +142,7 @@ namespace SportClub.Controllers
                 Members deletedMember = new Members();
                 TryUpdateModel(deletedMember, fieldsToBind);
                 ModelState.AddModelError(string.Empty,
-                    "Unable to save changes. The department was deleted by another user.");
+                    "Unable to save changes. The sport was deleted by another user.");
                 ViewBag.SportID = new SelectList(db.Sports, "SportID", "Name", deletedMember.SportID);
                 ViewBag.GroupID = new SelectList(db.Groups, "GroupID", "Title", deletedMember.GroupID);
                 return View(deletedMember);
@@ -157,7 +152,6 @@ namespace SportClub.Controllers
             {
                 try
                 {
-                    //db.Entry(sportToUpdate).OriginalValues["RowVersion"] = rowVersion;
                     db.Entry(memberToUpdate).State = EntityState.Modified;
                     await db.SaveChangesAsync();
 
@@ -171,7 +165,7 @@ namespace SportClub.Controllers
                     if (databaseEntry == null)
                     {
                         ModelState.AddModelError(string.Empty,
-                            "Unable to save changes. The department was deleted by another user.");
+                            "Unable to save changes. The sport was deleted by another user.");
                     }
                     else
                     {
@@ -200,7 +194,6 @@ namespace SportClub.Controllers
                             + "edit operation was canceled and the current values in the database "
                             + "have been displayed. If you still want to edit this record, click "
                             + "the Save button again. Otherwise click the Back to List hyperlink.");
-                        //sportToUpdate.RowVersion = databaseValues.RowVersion;
                     }
                 }
                 catch (RetryLimitExceededException /* dex */)
@@ -212,16 +205,6 @@ namespace SportClub.Controllers
             ViewBag.SportID = new SelectList(db.Sports, "SportID", "Name", memberToUpdate.SportID);
             ViewBag.GroupID = new SelectList(db.Groups, "GroupID", "Title", memberToUpdate.GroupID);
             return View(memberToUpdate);
-
-
-            //[Bind(Include = "ID,FirstName,LastName,DateOfBirth,Sport,Group,EnrollmentDate")] Members members
-            /*if (ModelState.IsValid)
-            {
-                db.Entry(members).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(members);*/
         }
 
         // GET: Members/Delete/5

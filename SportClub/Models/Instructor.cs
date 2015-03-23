@@ -21,8 +21,6 @@ namespace SportClub.Models
         [Display(Name = "Start date")]
         public DateTime Date { get; set; }
 
-       // public int SportID { get; set; }
-
         public virtual ICollection<Sport> Sports { get; set; }
         public virtual ICollection<Group> Groups { get; set; }
         public virtual ICollection<Enrollment> Enrollments { get; set; }

@@ -21,7 +21,7 @@ namespace SportClub.Controllers
             return View(db.Instructors.ToList());
         }
 
-        // GET: Instructors/Details/5
+        // GET: Instructors/Details
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -43,8 +43,6 @@ namespace SportClub.Controllers
         }
 
         // POST: Instructors/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID,FirtName,LastName,Date")] Instructor instructor)
@@ -74,9 +72,7 @@ namespace SportClub.Controllers
             return View(instructor);
         }
 
-        // POST: Instructors/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Instructors/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID,FirtName,LastName,Date")] Instructor instructor)
@@ -90,7 +86,7 @@ namespace SportClub.Controllers
             return View(instructor);
         }
 
-        // GET: Instructors/Delete/5
+        // GET: Instructors/Delete
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -110,24 +106,11 @@ namespace SportClub.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            //Instructor instructor = db.Instructors.Find(id);
-            //db.Instructors.Remove(instructor);
-            //db.SaveChanges();
-            //return RedirectToAction("Index");
             Instructor instructor = db.Instructors
               .Where(i => i.ID == id)
               .Single();
 
             db.Instructors.Remove(instructor);
-
-            //var department = db.Sports
-            //    .Where(d => d.InstructorID == id)
-            //    .SingleOrDefault();
-            //if (department != null)
-            //{
-            //    department.InstructorID = null;
-            //}
-
             db.SaveChanges();
             return RedirectToAction("Index");
         }

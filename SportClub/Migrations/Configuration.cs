@@ -28,9 +28,6 @@ namespace SportClub.Migrations
               //    new Person { FullName = "Rowan Miller" }
               //  );
             
-
-            
-
             var instructors = new List<Instructor>
             {
                 new Instructor{ FirtName="Kim", LastName="Harui", Date=DateTime.Parse("2011-02-22")},
@@ -86,25 +83,6 @@ namespace SportClub.Migrations
 
             members.ForEach(s => context.MembersDb.AddOrUpdate(p => p.LastName, s));
             context.SaveChanges();
-
-            //var enrollments = new List<Enrollment>
-            //{
-            //    new Enrollment{ MembersID=members.Single(s=> s.LastName=="Buncic").ID, GroupID=groups.Single(g=> g.Title=="Pro").GroupID, Grade=Grade.Perfect},
-            //    new Enrollment{MembersID=members.Single(s=> s.LastName=="Cvejic").ID, GroupID=groups.Single(g=> g.Title=="Amater").GroupID, Grade=Grade.VeryGood}
-            //};
-
-            //foreach (Enrollment e in enrollments)
-            //{
-            //    var enrollmentInDataBase = context.Enrollments.Where(
-            //        s =>
-            //             s.Members.ID == e.MembersID &&
-            //             s.Group.GroupID == e.GroupID).SingleOrDefault();
-            //    if (enrollmentInDataBase == null)
-            //    {
-            //        context.Enrollments.Add(e);
-            //    }
-            //}
-            //context.SaveChanges();
         }
 
         private void AddOrUpdateInstructor(DAL.SportContext context, string p1, string p2)
@@ -115,7 +93,6 @@ namespace SportClub.Migrations
             {
                 crs.Instructors.Add(context.Instructors.Single(i => i.LastName == p2));
             }
-            //throw new NotImplementedException();
         }
     }
 }

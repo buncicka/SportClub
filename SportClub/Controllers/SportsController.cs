@@ -21,7 +21,6 @@ namespace SportClub.Controllers
         // GET: Sports
         public ActionResult Index(int? id, int? InstructorID)
         {
-
             var viewModel = new SportIndexData();
 
             viewModel.Sports = db.Sports
@@ -38,10 +37,6 @@ namespace SportClub.Controllers
             if (InstructorID != null)
             {
                 ViewBag.InstructorID = InstructorID.Value;
-                // Lazy loading
-                //viewModel.Enrollments = viewModel.Courses.Where(
-                //    x => x.CourseID == courseID).Single().Enrollments;
-                // Explicit loading
                 var selectedInstructors = viewModel.Instructors.Where(x => x.ID == InstructorID).Single();
                 db.Entry(selectedInstructors).Collection(x => x.Enrollments).Load();
                 foreach (Enrollment enrollment in selectedInstructors.Enrollments)
@@ -55,8 +50,7 @@ namespace SportClub.Controllers
             return View(viewModel);
         }
 
-        // GET: Sports/Details/5
-        
+        // GET: Sports/AddInstructors
         public ActionResult AddInstructors(int? id)
         {
             if (id == null)
@@ -73,22 +67,9 @@ namespace SportClub.Controllers
                 return HttpNotFound();
             }
             return View(sport);
-
-
-            //if (id == null)
-            //{
-            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            //}
-            //Sport sports = db.Sports.Find(id);
-            //if (sports == null)
-            //{
-            //    return HttpNotFound();
-            //}
-
-            //ViewBag.InstructorID = new MultiSelectList(db.Instructors, "ID", "LastName");
-            //return View(sports);
         }
 
+        // POST: Sports/AddInstructors
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult AddInstructors(int? id, string[] selectedInstructors)
@@ -154,9 +135,6 @@ namespace SportClub.Controllers
             }
         }
 
-
-
-
         // GET: Sports/Create
         public ActionResult Create()
         {
@@ -167,8 +145,6 @@ namespace SportClub.Controllers
         }
 
         // POST: Sports/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "SportID, Name, StartDate, Price")] Sport sport, string[] selectedInstructors)
@@ -192,6 +168,7 @@ namespace SportClub.Controllers
             return View(sport);
         }
 
+        // GET: Sports/Edit
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -207,7 +184,7 @@ namespace SportClub.Controllers
             return View(sport);
         }
 
-        // GET: Sports/Edit/5
+        // POST: Sports/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(int? id, byte[] rowVersion)
@@ -233,7 +210,6 @@ namespace SportClub.Controllers
             {
                 try
                 {
-                    //db.Entry(sportToUpdate).OriginalValues["RowVersion"] = rowVersion;
                     db.Entry(sportToUpdate).State = EntityState.Modified;
                     await db.SaveChangesAsync();
 
@@ -267,7 +243,6 @@ namespace SportClub.Controllers
                             + "edit operation was canceled and the current values in the database "
                             + "have been displayed. If you still want to edit this record, click "
                             + "the Save button again. Otherwise click the Back to List hyperlink.");
-                        //sportToUpdate.RowVersion = databaseValues.RowVersion;
                     }
                 }
                 catch (RetryLimitExceededException /* dex */)
@@ -280,13 +255,7 @@ namespace SportClub.Controllers
             return View(sportToUpdate);
         }
 
-        // POST: Sports/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-      
-        
-
-        // GET: Sports/Delete/5
+        // GET: Sports/Delete
         public async Task<ActionResult> Delete(int? id, bool? concurrencyError)
         {
             if (id == null)
@@ -315,7 +284,7 @@ namespace SportClub.Controllers
             return View(sport);
         }
 
-        // POST: Sports/Delete/5
+        // POST: Sports/Delete
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(int id)
@@ -342,9 +311,6 @@ namespace SportClub.Controllers
             }
             ViewBag.Instructors = viewModel;
         }
-
-
-
 
         protected override void Dispose(bool disposing)
         {

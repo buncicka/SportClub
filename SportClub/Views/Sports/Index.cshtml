@@ -1,21 +1,21 @@
-﻿@*@model IEnumerable<SportClub.Models.Sport>*@
-@model SportClub.ViewModels.SportIndexData
+﻿@model SportClub.ViewModels.SportIndexData
 
 @{
     ViewBag.Title = "Sports";
 }
 
-<h2>Sports</h2>
+<h2><i>Sports</i></h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
+<table class="table table-condensed table-striped">
     <tr>
         <th>Name</th>
         <th>Start date</th>
         <th>Price</th>
-        <th>Instructors</th>
+        @*<th>Instructors</th>*@ 
+        <th></th>
         <th></th>
     </tr>
 
@@ -36,17 +36,17 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
+           
+             @*   @{
+    foreach (var instructor in item.Instructors)
+    {
+        @instructor.ID @:  @instructor.LastName<br />
+              }
+            }*@
+            
+            <td></td>
             <td>
-                @{
-                  foreach (var instructor in item.Instructors)
-                  {
-                        @instructor.ID @:  @instructor.LastName<br />
-                  }
-                 }
-            </td>
-
-            <td>
-                @Html.ActionLink("Select", "Index", new { id = item.SportID }) |
+                @Html.ActionLink("Instructors", "Index", new { id = item.SportID }) |
                 @Html.ActionLink("Edit", "Edit", new { id = item.SportID }) |
                 @Html.ActionLink("Add instructors", "AddInstructors", new { id = item.SportID }) |
                 @Html.ActionLink("Delete", "Delete", new { id = item.SportID })
@@ -58,14 +58,11 @@
 
 
 
-
-
 @if (Model.Instructors != null)
 {
     <h3>Instructors taught by Selected Sport</h3>
     <table class="table">
         <tr>
-            <th></th>
             <th>Number</th>
             <th>Last Name</th>
         </tr>

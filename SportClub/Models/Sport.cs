@@ -22,7 +22,6 @@ namespace SportClub.Models
         [Column(TypeName = "money")]
         public decimal Price { get; set; }
 
-        //[Display(Name = "Instructor")]
         public int? InstructorID { get; set; }
 
         [Timestamp]
@@ -31,6 +30,5 @@ namespace SportClub.Models
         public virtual ICollection<Instructor> Instructors { get; set; }
         public virtual ICollection<Group> Groups { get; set; }
 
-        //public virtual Instructor Instructor { get; set; }
     }
 }

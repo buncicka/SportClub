@@ -35,6 +35,5 @@ namespace SportClub.Models
 
         public virtual ICollection<Enrollment> Enrollments { get; set; }
 
-        //public int Group { get; set; }
     }
 }

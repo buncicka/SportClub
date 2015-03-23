@@ -31,7 +31,7 @@ namespace SportClub.Controllers
             return View(groups.ToList());
         }
 
-        // GET: Groups/Details/5
+        // GET: Groups/Details
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -54,8 +54,6 @@ namespace SportClub.Controllers
         }
 
         // POST: Groups/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "GroupID,Title, SportID")] Group group)
@@ -78,7 +76,7 @@ namespace SportClub.Controllers
             return View(group);
         }
 
-        // GET: Groups/Edit/5
+        // GET: Groups/Edit
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -95,8 +93,6 @@ namespace SportClub.Controllers
         }
 
         // POST: Groups/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
         public ActionResult EditPost(int? id)
@@ -137,7 +133,7 @@ namespace SportClub.Controllers
             ViewBag.SportID = new SelectList(departmentsQuery, "SportID", "Name", selectedSport);
         }
 
-        // GET: Groups/Delete/5
+        // GET: Groups/Delete
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -154,7 +150,7 @@ namespace SportClub.Controllers
             return View(group);
         }
 
-        // POST: Groups/Delete/5
+        // POST: Groups/Delete
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
