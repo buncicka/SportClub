@@ -10,9 +10,13 @@ namespace SportClub.Models
     {
         public int ID { get; set; }
 
+        [Required(ErrorMessage = "The First Name field is required.")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         [Display(Name = "First name")]
         public string FirtName { get; set; }
 
+        [Required(ErrorMessage = "The Last Name field is required.")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         [Display(Name = "Last name")]
         public string LastName { get; set; }
 

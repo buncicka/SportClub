@@ -13,7 +13,10 @@ namespace SportClub.Models
         [Display(Name = "Number")]
         public int GroupID { get; set; }
 
+        [Required(ErrorMessage = "The Title field is required.")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string Title { get; set; }
+
         public int SportID { get; set; }
 
         public virtual Sport Sport { get; set; }

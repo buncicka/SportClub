@@ -10,9 +10,13 @@ namespace SportClub.Models
     {
         public int ID { get; set; }
 
+        [Required(ErrorMessage = "The First Name field is required.")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         [StringLength(50, ErrorMessage = "First name cannot be longer than 50 characters.")]
         public string FirstName { get; set; }
 
+        [Required(ErrorMessage = "The Last Name field is required.")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         [StringLength(50, ErrorMessage = "Last name cannot be longer than 50 characters.")]
         public string LastName { get; set; }
         
